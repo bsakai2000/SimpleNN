@@ -41,6 +41,31 @@ Network::Network(int num_inputs, int num_layers, int nodes_per_layer, int num_ou
 	initialize_weights();
 }
 
+Network::~Network()
+{
+	// Free the input weights
+	for(int i = 0; i < num_inputs + 1; ++i)
+	{
+		free(weights[0][i]);
+	}
+
+	free(weights[0]);
+
+	// Free the hidden layer weights
+	for(int i = 1; i < num_layers + 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer + 1; ++j)
+		{
+			free(weights[i][j]);
+		}
+
+		free(weights[i]);
+	}
+
+	// Finally, free weights
+	free(weights);
+}
+
 double* Network::forward_propagate(double* input)
 {
 	// Allocate a temporary array for node values
@@ -54,7 +79,7 @@ double* Network::forward_propagate(double* input)
 	get_next_layer(input, num_inputs, nodes[0], nodes_per_layer, weights[0]);
 	
 	// Propagate through the hidden layers
-	for(int i = 1; i < num_layers - 1; ++i)
+	for(int i = 1; i < num_layers; ++i)
 	{
 		get_next_layer(nodes[i - 1], nodes_per_layer, nodes[i], nodes_per_layer, weights[i]);
 	}
@@ -113,5 +138,5 @@ void Network::initialize_weights()
 double Network::get_activation(double x)
 {
 	/* TODO */
-	return 1;
+	return x;
 }
