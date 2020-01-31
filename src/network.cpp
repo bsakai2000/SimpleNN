@@ -137,6 +137,9 @@ void Network::initialize_weights()
 
 double Network::get_activation(double x)
 {
-	/* TODO */
+	if(x < 0)
+	{
+		return x * 0.1;
+	}
 	return x;
 }
