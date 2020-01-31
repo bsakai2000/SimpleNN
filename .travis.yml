@@ -1,0 +1,10 @@
+# Stolen from https://github.com/codecov/example-c/blob/master/.travis.yml
+language: c++
+sudo: false
+script:
+        - CXX=g++ CFLAGS=-coverage make
+        - ./bin/test
+        - gcov network.cpp
+
+after_success:
+        - bash <(curl -s https://codecov.io/bash)

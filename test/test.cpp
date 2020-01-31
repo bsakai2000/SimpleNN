@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #define private public
-#include "../src/network.hpp"
+#include "network.hpp"
 
 // Checks that forward propagation works
 // ASSUMES ACTIVATION FUNCTION y(x) = x, NEEDS UPDATING
