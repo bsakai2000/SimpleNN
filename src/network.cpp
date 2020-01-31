@@ -135,6 +135,7 @@ void Network::initialize_weights()
 	/* TODO */
 }
 
+// We use a Leaky RELU activation
 double Network::get_activation(double x)
 {
 	if(x < 0)
