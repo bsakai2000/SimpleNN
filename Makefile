@@ -11,3 +11,4 @@ runtest:
 
 clean:
 	rm -rf ./bin
+	rm -f *.gcov *.gcda *.gcno

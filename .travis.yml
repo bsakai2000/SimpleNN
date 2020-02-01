@@ -4,7 +4,8 @@ sudo: false
 script:
         - CXX=g++ CFLAGS=-coverage make
         - ./bin/test
-        - gcov network.cpp
 
 after_success:
-        - bash <(curl -s https://codecov.io/bash)
+        # Maybe we'll try code coverage again sometime
+        #- bash <(curl -s https://codecov.io/bash)
+        - gcov network.cpp
