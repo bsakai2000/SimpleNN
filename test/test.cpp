@@ -104,10 +104,40 @@ int check_leaks(Network* n)
 	return 0;
 }
 
+// Checks that the weights are being initialized properly
+int check_he_init(Network* n)
+{
+	// If everything initialized properly these weights should
+	// have known values that we can test against
+	printf("Testing He Initialized weights with input 10... ");
+	double in = 10;
+	double* out = n->forward_propagate(&in);
+	if(!double_equals(out[0], 12.42613052))
+	{
+		printf("%f is the wrong output, should be 12.4261\n", out[0]);
+		return 1;
+	}
+	printf("Passed \n");
+	free(out);
+
+	// Negative tests to make sure Relu is still leaking
+	printf("Testing He Initialized weights with input -8... ");
+	in = -8;
+	out = n->forward_propagate(&in);
+	if(!double_equals(out[0], 0.4191911655))
+	{
+		printf("%f is the wrong output, should be 0.4191\n", out[0]);
+		return 1;
+	}
+	printf("Passed \n");
+	free(out);
+	return 0;
+}
+
 int main()
 {
 	// Create our network
-	Network* n = new Network(1, 2, 2, 4);
+	Network* n = new Network(1, 2, 2, 1);
 	
 	// Our weights from input to first hidden layer is 1, 2
 	for(int i = 0; i < 2; ++i)
@@ -156,6 +186,15 @@ int main()
 	if(check_leaks(n))
 	{
 		printf("Leaky RELU Test failed\n");
+		return 1;
+	}
+
+	srand(0);
+	n->initialize_weights();
+
+	if(check_he_init(n))
+	{
+		printf("He Initialization Test Failed\n");
 		return 1;
 	}
 
