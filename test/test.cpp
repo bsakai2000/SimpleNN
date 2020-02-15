@@ -143,7 +143,7 @@ int check_loss(Network* n)
 	double vec1[9] = {1, 5, 6, 3, 2, 7, 34, 1, -8};
 	double vec2[9] = {-2, 23, 93, 0, -2, 7, 1, 21, 5};
 	double out = n->get_loss(vec1, vec2, 9);
-	if(out != 532.5)
+	if(!double_equals(out, 532.5))
 	{
 		printf("%f is the wrong output, should 532.500\n", out);
 		return 1;
@@ -155,7 +155,7 @@ int check_loss(Network* n)
 	double vec3[9] = {-4.171101552, 2.842574601, -2.732273984, -0.1811689881, 0.1015954349, -4.094040275, 3.475649399, 3.38189863, -3.475049535};
 	double vec4[9] = {-4.762854364, -4.494467354, 1.241347261, -1.182362005, 1.420223059, -1.433819369, 1.545288678, 2.420261452, -3.009780973};
 	out = n->get_loss(vec3, vec4, 9);
-	if(out - 4.703193155 > 0.0001 || out - 4.703193155 < -0.001)
+	if(!double_equals(out, 4.703193155))
 	{
 		printf("%f is the wrong output, should 4.703\n", out);
 		return 1;
