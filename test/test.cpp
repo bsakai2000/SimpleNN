@@ -45,7 +45,7 @@ int check_forward_propagation(Network* n)
 	}
 	printf("Passed \n");
 	free(out);
-return 0;
+	return 0;
 }
 
 int check_biases(Network* n)
@@ -161,16 +161,14 @@ int check_loss(Network* n)
 		return 1;
 	}
 	printf("Passed\n");
-
-	delete n;
-  return 0;
+	return 0;
 }
 
 int main()
 {
 	// Create our network
 	Network* n = new Network(1, 2, 2, 1);
-	
+
 	// Our weights from input to first hidden layer is 1, 2
 	for(int i = 0; i < 2; ++i)
 	{
@@ -219,7 +217,7 @@ int main()
 	{
 		printf("Leaky RELU Test failed\n");
 		return 1;
-  }
+	}
 
 	srand(0);
 	n->initialize_weights();
@@ -230,12 +228,12 @@ int main()
 		return 1;
 	}
 
-  if (check_loss(n))
+	if (check_loss(n))
 	{
 		printf("Loss Function Test failed\n");
-    return 1;
+		return 1;
 	}
-  
+
 	printf("It worked!\n");
 	delete n;
 }
