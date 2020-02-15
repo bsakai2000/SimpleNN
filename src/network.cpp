@@ -2,6 +2,9 @@
 
 Network::Network(int num_inputs, int num_layers, int nodes_per_layer, int num_outputs)
 {
+	// Initialize our random number generator
+	srand(time(NULL));
+
 	// Initialize the global variables for our object
 	this->num_inputs = num_inputs;
 	this->num_layers = num_layers;
@@ -130,14 +133,56 @@ void Network::get_next_layer(double* current_layer, int num_current_layer, doubl
 	}
 }
 
+// We use He initialization, an algorithm designed
+// to work well with RELU and LRELU
+// source https://towardsdatascience.com/weight-initialization-techniques-in-neural-networks-26c649eb3b78
 void Network::initialize_weights()
 {
-	/* TODO */
+	double he_coefficient = sqrt(2.0 / num_inputs);
+	// Initialize the weights from input to first layer
+	for(int i = 0; i < num_inputs + 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer; ++j)
+		{
+			weights[0][i][j] = random_number() * he_coefficient; 
+		}
+	}
+
+	// Initialize the hidden weights
+	he_coefficient = sqrt(2.0 / nodes_per_layer);
+	for(int i = 1; i < num_layers; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer + 1; ++j)
+		{
+			for(int k = 0; k < nodes_per_layer; ++k)
+			{
+				weights[i][j][k] = random_number() * he_coefficient;
+			}
+		}
+	}
+
+	// Initialize the weights from the last layer to the output
+	for(int i = 0; i < nodes_per_layer + 1; ++i)
+	{
+		for(int j = 0; j < num_outputs; ++j)
+		{
+			weights[num_layers][i][j] = random_number() * he_coefficient;
+		}
+	}
 }
 
+double Network::random_number()
+{
+	return ((double) rand()) / RAND_MAX;
+}
+
+// We use a Leaky RELU activation
 double Network::get_activation(double x)
 {
-	/* TODO */
+	if(x < 0)
+	{
+		return x * 0.1;
+	}
 	return x;
 }
 

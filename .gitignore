@@ -1,2 +1,6 @@
 *.o
 *.out
+/bin/
+*.gcov
+*.gcda
+*.gcno
