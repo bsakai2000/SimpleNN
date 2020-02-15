@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <math.h>
 
 #define private public
 #include "network.hpp"
@@ -44,7 +45,7 @@ int check_forward_propagation(Network* n)
 	}
 	printf("Passed \n");
 	free(out);
-return 0;
+	return 0;
 }
 
 int check_biases(Network* n)
@@ -134,11 +135,40 @@ int check_he_init(Network* n)
 	return 0;
 }
 
+// Ensure that the loss calculations conform to MSE
+int check_loss(Network* n)
+{
+	printf("Testing loss function with integer values... ");
+	// Generate two vectors to compute loss with
+	double vec1[9] = {1, 5, 6, 3, 2, 7, 34, 1, -8};
+	double vec2[9] = {-2, 23, 93, 0, -2, 7, 1, 21, 5};
+	double out = n->get_loss(vec1, vec2, 9);
+	if(out != 532.5)
+	{
+		printf("%f is the wrong output, should 532.500\n", out);
+		return 1;
+	}
+	printf("Passed\n");
+
+	printf("Testing loss function with double values... ");
+	// Chosen by fair dice roll, guaranteed to be random
+	double vec3[9] = {-4.171101552, 2.842574601, -2.732273984, -0.1811689881, 0.1015954349, -4.094040275, 3.475649399, 3.38189863, -3.475049535};
+	double vec4[9] = {-4.762854364, -4.494467354, 1.241347261, -1.182362005, 1.420223059, -1.433819369, 1.545288678, 2.420261452, -3.009780973};
+	out = n->get_loss(vec3, vec4, 9);
+	if(out - 4.703193155 > 0.0001 || out - 4.703193155 < -0.001)
+	{
+		printf("%f is the wrong output, should 4.703\n", out);
+		return 1;
+	}
+	printf("Passed\n");
+	return 0;
+}
+
 int main()
 {
 	// Create our network
 	Network* n = new Network(1, 2, 2, 1);
-	
+
 	// Our weights from input to first hidden layer is 1, 2
 	for(int i = 0; i < 2; ++i)
 	{
@@ -195,6 +225,12 @@ int main()
 	if(check_he_init(n))
 	{
 		printf("He Initialization Test Failed\n");
+		return 1;
+	}
+
+	if (check_loss(n))
+	{
+		printf("Loss Function Test failed\n");
 		return 1;
 	}
 
