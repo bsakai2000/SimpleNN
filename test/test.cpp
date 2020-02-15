@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #define private public
-#include "../src/network.hpp"
+#include "network.hpp"
 
 // Floating point math is hard. taken from https://stackoverflow.com/a/18975072/12432023
 // minus the std::
