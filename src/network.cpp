@@ -140,3 +140,15 @@ double Network::get_activation(double x)
 	/* TODO */
 	return x;
 }
+
+double Network::get_loss(double* vector1, double* vector2, int size)
+{
+	double result = 0;
+	// Sum the squares of the differences of the elements of the vectors
+	for(int i = 0; i < size; ++i)
+	{
+		result += pow(vector1[i] - vector2[i], 2);
+	}
+	// Loss is sum of squares divided by 2 * size
+	return result / (2.0 * size);
+}

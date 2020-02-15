@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <cmath>
 
 class Network
 {
@@ -28,8 +29,8 @@ class Network
 		// weights[i][j][k] is the weight from node j in layer i to node k in layer i + 1
 		double*** weights;
 
-		// Get the loss value for a certain input given the correct output
-		double get_loss(double* input, double* expected_output);
+		// Get the loss value between two vectors of length size using Mean Squared Error formula
+		double get_loss(double* vector1, double* vector2, int size);
 		// Randomly initialize the weights of the network
 		void initialize_weights();
 		// Our activation function, eg sigmoid
