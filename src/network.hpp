@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <ctime>
+#include <cmath>
 
 class Network
 {
@@ -36,4 +38,6 @@ class Network
 		double get_activation(double x);
 		// Update next_layer given the weights and the values of current_layer
 		void get_next_layer(double* current_layer, int num_current_layer, double* next_layer, int num_next_layer, double** current_weights);
+		// Returns a random number from 0 to 1
+		double random_number();
 };
