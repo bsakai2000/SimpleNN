@@ -205,3 +205,8 @@ double Network::get_loss(double* vector1, double* vector2, int size)
 	// Loss is sum of squares divided by 2 * size
 	return result / (2.0 * size);
 }
+
+void Network::train(double** inputs, double** expected_outputs, int num_inputs)
+{
+	/* TODO */
+}

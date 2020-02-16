@@ -9,6 +9,11 @@ runtest:
 	$(CXX) ./src/network.cpp ./test/test.cpp -o ./bin/test $(CFLAGS)
 	./bin/test
 
+examples_squares:
+	mkdir -p ./bin
+	$(CXX) ./src/network.cpp ./examples/test_squares.cpp -o ./bin/squares $(CFLAGS)
+	./bin/squares
+
 clean:
 	rm -rf ./bin
 	rm -f *.gcov *.gcda *.gcno

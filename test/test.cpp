@@ -166,6 +166,8 @@ int check_loss(Network* n)
 
 int main()
 {
+	setbuf(stdout, NULL);
+
 	// Create our network
 	Network* n = new Network(1, 2, 2, 1);
 
