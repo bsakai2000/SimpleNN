@@ -2,8 +2,16 @@
 
 Network::Network(int num_inputs, int num_layers, int nodes_per_layer, int num_outputs)
 {
-	// Initialize our random number generator
-	srand(time(NULL));
+	// Check if rand has been seeded. If the caller didn't call srand yet
+	// it's important we call it so our random numbers are truly random.
+	// If the caller already called srand, assume they did it for a reason
+	// and did it correctly. This can be useful for debugging if you want
+	// your results to be repeatable
+	if(rand() == 1804289383)
+	{
+		// If rand hasn't been seeded, seed with current time
+		srand(time(NULL));
+	}
 
 	// Initialize the global variables for our object
 	this->num_inputs = num_inputs;
