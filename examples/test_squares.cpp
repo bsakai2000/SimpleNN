@@ -32,11 +32,11 @@ int main()
 	for(int i = 0; i < NUM_BATCHES; ++i)
 	{
 		// Populate the arrays
-		for(int i = 0; i < NUM_EXAMPLES; ++i)
+		for(int j = 0; j < NUM_EXAMPLES; ++j)
 		{
 			// We want random values from -INPUT_SPREAD to INPUT_SPREAD
-			*(input[i]) = (((double) rand()) / RAND_MAX * INPUT_SPREAD * 2) - INPUT_SPREAD;
-			*(expected_output[i]) = pow(*(input[i]), 2);
+			*(input[j]) = (((double) rand()) / RAND_MAX * INPUT_SPREAD * 2) - INPUT_SPREAD;
+			*(expected_output[j]) = pow(*(input[j]), 2);
 		}
 
 		// Train with our datasets

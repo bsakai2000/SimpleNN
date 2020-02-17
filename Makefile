@@ -14,6 +14,11 @@ examples_squares:
 	$(CXX) ./src/network.cpp ./examples/test_squares.cpp -o ./bin/squares $(CFLAGS)
 	./bin/squares
 
+examples_draw:
+	mkdir -p ./bin
+	$(CXX) ./src/network.cpp ./examples/test_draw_image.cpp -o ./bin/draw $(CFLAGS)
+	./bin/draw ./examples/cat.bmp > ./bin/cat1.bmp
+
 clean:
 	rm -rf ./bin
 	rm -f *.gcov *.gcda *.gcno
