@@ -24,6 +24,11 @@ examples_draw_mocked:
 	$(CXX) ./examples/test_draw_image.cpp -o ./bin/draw $(CFLAGS) -I./examples
 	./bin/draw ./examples/cat.bmp > ./bin/cat1.bmp
 
+examples_mnist:
+	mkdir -p ./bin
+	$(CXX) ./src/network.cpp ./examples/test_mnist.cpp -o ./bin/mnist $(CFLAGS)
+	./bin/mnist ./examples/train-labels-idx1-ubyte ./examples/train-images-idx3-ubyte
+
 clean:
 	rm -rf ./bin
 	rm -f *.gcov *.gcda *.gcno
