@@ -66,5 +66,7 @@ int main()
 		free(out);
 	}
 
+	delete n;
+
 	return 0;
 }

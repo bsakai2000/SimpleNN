@@ -99,7 +99,7 @@ unsigned char* generate_image(Network* n, int image_height, int image_width)
 	row_width = ((row_width + 3) / 4) * 4;
 
 	// Allocate space for our image
-	unsigned char* image_data = (unsigned char*) malloc(image_height * row_width * sizeof(unsigned char));
+	unsigned char* image_data = (unsigned char*) calloc(image_height * row_width, sizeof(unsigned char));
 	unsigned char* image_ptr = image_data;
 	double* input = (double*) malloc(2 * sizeof(double));
 	// Loop through each x and y value of the image to calculate its pixel values
@@ -132,6 +132,7 @@ unsigned char* generate_image(Network* n, int image_height, int image_width)
 		// Move image_ptr to the start of the next pixel row
 		image_ptr += row_width - image_width * 3;
 	}
+	free(input);
 	return image_data;
 }
 
@@ -184,7 +185,19 @@ int main(int argc, char* argv[])
 		}
 		// Train with out datasets
 		n->train(input, expected_output, NUM_EXAMPLES);
+		for(int j = 0; j < NUM_EXAMPLES; ++j)
+		{
+			free(expected_output[j]);
+		}
 	}
+
+	for(int i = 0; i < NUM_EXAMPLES; ++i)
+	{
+		free(input[i]);
+	}
+	free(input);
+	free(expected_output);
+	free(image_buffer);
 
 	// Generate image from the Network
 	unsigned char* image_data = generate_image(n, image_height, image_width);
@@ -203,6 +216,10 @@ int main(int argc, char* argv[])
 	{
 		printf("%c", image_data[i]);
 	}
+
+	free(header);
+	free(image_data);
+	delete n;
 
 	return 0;
 }
