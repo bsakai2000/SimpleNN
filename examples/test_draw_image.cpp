@@ -1,4 +1,4 @@
-#include "network.hpp"
+#include "FalseNetwork.hpp"
 #include <cstdio>
 #include <cstdint>
 
@@ -8,7 +8,7 @@
 
 // Read a BMP file denoted by filename into image_buffer, and set image_height and image_width
 // to the values given by the file
-int read_image(char* filename, char** image_buffer, int* image_width, int* image_height, char** return_header)
+int read_image(char* filename, unsigned char** image_buffer, int* image_width, int* image_height, unsigned char** return_header)
 {
 	// Open the image file for reading and ensure that it is readable
 	FILE* image_file = fopen(filename, "rb");
@@ -20,8 +20,8 @@ int read_image(char* filename, char** image_buffer, int* image_width, int* image
 	}
 
 	// Read the BMP header to get necessary information
-	char* header = (char*) malloc(HEADER_SIZE * sizeof(char));
-	fread(header, sizeof(char), HEADER_SIZE, image_file);
+	unsigned char* header = (unsigned char*) malloc(HEADER_SIZE * sizeof(unsigned char));
+	fread(header, sizeof(unsigned char), HEADER_SIZE, image_file);
 	// Check the magic bytes to ensure we're actually working on a BMP
 	if((*(int16_t*) header) != 0x4D42)
 	{
@@ -54,9 +54,9 @@ int read_image(char* filename, char** image_buffer, int* image_width, int* image
 	*image_height = *(int32_t*) (header + 22);
 
 	// Read the image data into the buffer
-	*image_buffer = (char*) malloc((file_size - data_offset) * sizeof(char));
+	*image_buffer = (unsigned char*) malloc((file_size - data_offset) * sizeof(unsigned char));
 	fseek(image_file, data_offset, SEEK_SET);
-	fread(*image_buffer, sizeof(char), file_size - data_offset, image_file);
+	fread(*image_buffer, sizeof(unsigned char), file_size - data_offset, image_file);
 
 	*return_header = header;
 
@@ -65,7 +65,7 @@ int read_image(char* filename, char** image_buffer, int* image_width, int* image
 
 // Get a 3 char array of RGB values for the pizel at (x, y) in image_buffer. We return this
 // as a double* instead of a char* because we're passing it to the Network
-double* get_pixel(int x, int y, char* image_buffer, int image_height, int image_width)
+double* get_pixel(int x, int y, unsigned char* image_buffer, int image_height, int image_width)
 {
 	// If the pixel is out of bounds, don't even try
 	if(x > image_width || y > image_height)
@@ -81,7 +81,7 @@ double* get_pixel(int x, int y, char* image_buffer, int image_height, int image_
 	row_width = ((row_width + 3) / 4) * 4;
 
 	// Read the BGR values into the pixel
-	char* pixel_ptr = image_buffer + (y * row_width) + x * 3;
+	unsigned char* pixel_ptr = image_buffer + (y * row_width) + x * 3;
 	for(int i = 0; i < 3; ++i)
 	{
 		pixel[i] = pixel_ptr[i];
@@ -92,15 +92,15 @@ double* get_pixel(int x, int y, char* image_buffer, int image_height, int image_
 }
 
 // Generate a BMP pixel array from a trained Neural Network
-char* generate_image(Network* n, int image_height, int image_width)
+unsigned char* generate_image(Network* n, int image_height, int image_width)
 {
 	// Calculate the width of a row, aligned to 4 bytes
 	int row_width = image_width * 3;
 	row_width = ((row_width + 3) / 4) * 4;
 
 	// Allocate space for our image
-	char* image_data = (char*) malloc(image_height * row_width * 3 * sizeof(char));
-	char* image_ptr = image_data;
+	unsigned char* image_data = (unsigned char*) malloc(image_height * row_width * sizeof(unsigned char));
+	unsigned char* image_ptr = image_data;
 	double* input = (double*) malloc(2 * sizeof(double));
 	// Loop through each x and y value of the image to calculate its pixel values
 	for(int i = 0; i < image_height; ++i)
@@ -124,13 +124,13 @@ char* generate_image(Network* n, int image_height, int image_width)
 					pixelValue = 255;
 				}
 				// Write the values to the image
-				*image_ptr = (char) pixelValue;
+				*image_ptr = (unsigned char) pixelValue;
 				++image_ptr;
 			}
 			free(pixel);
 		}
 		// Move image_ptr to the start of the next pixel row
-		image_ptr += row_width - image_width;
+		image_ptr += row_width - image_width * 3;
 	}
 	return image_data;
 }
@@ -154,8 +154,8 @@ int main(int argc, char* argv[])
 	}
 
 	// Read in the image, and give up if reading fails
-	char* image_buffer;
-	char* header;
+	unsigned char* image_buffer;
+	unsigned char* header;
 	int image_width, image_height;
 	if(read_image(argv[1], &image_buffer, &image_width, &image_height, &header) == 1)
 	{
@@ -187,7 +187,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Generate image from the Network
-	char* image_data = generate_image(n, image_height, image_width);
+	unsigned char* image_data = generate_image(n, image_height, image_width);
 
 	// Output the header
 	for(int i = 0; i < HEADER_SIZE; ++i)

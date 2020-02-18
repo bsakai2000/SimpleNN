@@ -19,6 +19,11 @@ examples_draw:
 	$(CXX) ./src/network.cpp ./examples/test_draw_image.cpp -o ./bin/draw $(CFLAGS)
 	./bin/draw ./examples/cat.bmp > ./bin/cat1.bmp
 
+examples_draw_mocked:
+	mkdir -p ./bin
+	$(CXX) ./examples/test_draw_image.cpp -o ./bin/draw $(CFLAGS) -I./examples
+	./bin/draw ./examples/cat.bmp > ./bin/cat1.bmp
+
 clean:
 	rm -rf ./bin
 	rm -f *.gcov *.gcda *.gcno
