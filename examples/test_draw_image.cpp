@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
 	int row_width = image_width * 3;
 	row_width = ((row_width + 3) / 4) * 4;
 	// Output the image data
-	for(int i = 0; i < image_height * row_width * 3; ++i)
+	for(int i = 0; i < image_height * row_width; ++i)
 	{
 		printf("%c", image_data[i]);
 	}
