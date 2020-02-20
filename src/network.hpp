@@ -10,11 +10,18 @@ class Network
 
 		// Get the output of the network given an array of inputs of size num_inputs
 		double* forward_propagate(double* input);
+
 		// Train the network using backpropagation, given an array of inputs, an array of outputs,
 		// and the size of the two arrays. The arrays should be the same size, and each element of
 		// inputs should be of size num_inputs, and each element of expected_outputs should be of
 		// size num_outputs
 		void train(double** inputs, double** expected_outputs, int num_inputs);
+
+		// Return the weights of this Network so that a trained model can be saved
+		double* dump_weights();
+
+		// Load the values from linear_weights into the weights of this Network
+		void load_weights(double* linear_weights);
 		
 	private:
 		// The number of nodes in the input layer
