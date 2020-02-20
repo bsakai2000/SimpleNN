@@ -135,6 +135,30 @@ int check_he_init(Network* n)
 	return 0;
 }
 
+// Ensure that the weights are properly stored and loaded by the Network. Note that we don't
+// test if the weights are stored correctly, just that they can be restored correctly. This
+// means that the logic for the storage and loading can be wrong so long as they work together
+int check_load_store(Network* n)
+{
+	// Load and restore weights from n to n2
+	double* stored_weights = n->dump_weights();
+	Network* n2 = new Network(1, 2, 2, 1);
+	n2->load_weights(stored_weights);
+
+	// Use the existing weights checks so we can
+	// avoid code reuse and ensure that the outputs match
+	printf("Testing load and store using He Initialization checks...\n");
+	if(check_he_init(n2))
+	{
+		return 1;
+	}
+	printf("Passed\n");
+
+	delete n2;
+	free(stored_weights);
+	return 0;
+}
+
 // Ensure that the loss calculations conform to MSE
 int check_loss(Network* n)
 {
@@ -221,6 +245,8 @@ int main()
 		return 1;
 	}
 
+	// Seed the random number generator and reinitialize the weights
+	// so they'll follow the He Initialization pattern
 	srand(0);
 	n->initialize_weights();
 
@@ -228,6 +254,11 @@ int main()
 	{
 		printf("He Initialization Test Failed\n");
 		return 1;
+	}
+
+	if(check_load_store(n))
+	{
+		printf("Load and store checks failed\n");
 	}
 
 	if (check_loss(n))

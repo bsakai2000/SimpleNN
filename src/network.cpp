@@ -210,3 +210,87 @@ void Network::train(double** inputs, double** expected_outputs, int num_inputs)
 {
 	/* TODO */
 }
+
+double* Network::dump_weights()
+{
+	// Allocate space for all of the weights and biases
+	int num_weights = (num_inputs + 1) * nodes_per_layer
+		+ (nodes_per_layer + 1) * nodes_per_layer * (num_layers - 1)
+		+ (nodes_per_layer + 1) * num_outputs;
+	double* linear_weights = (double*) malloc(num_weights * sizeof(double));
+	double* weights_ptr = linear_weights;
+
+	// Read all of the weights from inputs to the first hidden layer
+	for(int i = 0; i < num_inputs + 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer; ++j)
+		{
+			*weights_ptr = weights[0][i][j];
+			++weights_ptr;
+		}
+	}
+
+	// Read all of the weights inside the hidden layers
+	for(int i = 0; i < num_layers - 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer + 1; ++j)
+		{
+			for(int k = 0; k < nodes_per_layer; ++k)
+			{
+				*weights_ptr = weights[i + 1][j][k];
+				++weights_ptr;
+			}
+		}
+	}
+
+	// Read all of the weights from the last hidden layer to the output
+	for(int i = 0; i < nodes_per_layer + 1; ++i)
+	{
+		for(int j = 0; j < num_outputs; ++j)
+		{
+			*weights_ptr = weights[num_layers][i][j];
+			++weights_ptr;
+		}
+	}
+
+	// Return the weights and biases. The caller must free
+	return linear_weights;
+}
+
+void Network::load_weights(double* linear_weights)
+{
+	double* weights_ptr = linear_weights;
+
+	// Read all of the weights from inputs to the first hidden layer
+	for(int i = 0; i < num_inputs + 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer; ++j)
+		{
+			weights[0][i][j] = *weights_ptr;
+			++weights_ptr;
+		}
+	}
+
+	// Read all of the weights inside the hidden layers
+	for(int i = 0; i < num_layers - 1; ++i)
+	{
+		for(int j = 0; j < nodes_per_layer + 1; ++j)
+		{
+			for(int k = 0; k < nodes_per_layer; ++k)
+			{
+				weights[i + 1][j][k] = *weights_ptr;
+				++weights_ptr;
+			}
+		}
+	}
+
+	// Read all of the weights from the last hidden layer to the output
+	for(int i = 0; i < nodes_per_layer + 1; ++i)
+	{
+		for(int j = 0; j < num_outputs; ++j)
+		{
+			weights[num_layers][i][j] = *weights_ptr;
+			++weights_ptr;
+		}
+	}
+}

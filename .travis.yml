@@ -2,7 +2,7 @@
 language: cpp
 os: linux
 script:
-        - CXX=g++ CFLAGS=-coverage make
+        - CXX=g++ CFLAGS=-coverage make check
         - ./bin/test
 
 after_success:
