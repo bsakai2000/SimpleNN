@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.com/bsakai2000/SimpleNN.svg?branch=master)](https://travis-ci.com/bsakai2000/SimpleNN)
 # SimpleNN
 
+# NONFUNCTIONAL - Meant to be a group project, now abandonware
+
 A simple Neural Network implementation in C++
 
 This repository contains a /src folder for files pertaining to the Network class, which can be used to build and train neural networks, and a /test folder for testing both the full Network and its component functions. To run tests, call `make runtest`.
